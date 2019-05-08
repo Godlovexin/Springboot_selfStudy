@@ -77,7 +77,7 @@ public class FrameApplicationTests {
 		final Semaphore semaphore = new Semaphore(threadTotal);
 		final CountDownLatch countDownLatch = new CountDownLatch(clientTotal);
 
-		redisService.setRedisKey("pronum",100,10000000);
+		redisService.setRedisKey("pronum",200,10000000);
 
 
 		for (int i = 0; i < clientTotal; i++) {

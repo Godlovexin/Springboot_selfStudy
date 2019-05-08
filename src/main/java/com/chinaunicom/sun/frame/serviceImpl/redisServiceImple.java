@@ -44,13 +44,19 @@ public class redisServiceImple implements redisService {
         return redisUtil.releaseLock(lockKey,value);
     }
 
+    /**
+     * 锁超时时间，防止线程在入锁以后，无限的执行等待
+     */
+    private int expireMsecs = 60 * 1000;
+
     /***
      * 抢购代码
      * @param key pronum 首先用客户端设置数量
      * @return
      */
-    public boolean seckill( String key) {
+    public  boolean  seckill( String key) {
         RedisLock lock = new RedisLock(redisLock.getRedisTemplate(), key, 10000, 20000);
+
         try {
             if (lock.lock()) {
                 System.out.println("======" + Thread.currentThread().getName() + "进程加锁成功！======");
@@ -73,8 +79,9 @@ public class redisServiceImple implements redisService {
         } finally {
             // 为了让分布式锁的算法更稳键些，持有锁的客户端在解锁之前应该再检查一次自己的锁是否已经超时，再去做DEL操作，因为可能客户端因为某个耗时的操作而挂起，
             // 操作完的时候锁因为超时已经被别人获得，这时就不必解锁了。 ————这里没有做
+
             lock.unlock();
-            System.out.println("======" + Thread.currentThread().getName() + "进程解锁成功！======");
+
         }
         return false;
     }
