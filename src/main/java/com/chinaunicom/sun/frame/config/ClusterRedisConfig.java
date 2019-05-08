@@ -1,5 +1,6 @@
 package com.chinaunicom.sun.frame.config;
 
+import com.chinaunicom.sun.frame.utils.RedisLock;
 import com.chinaunicom.sun.frame.utils.RedisUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -166,6 +167,21 @@ public class ClusterRedisConfig {
         RedisUtil redisUtil = new RedisUtil();
         redisUtil.setRedisTemplate(redisTemplate);
         return redisUtil;
+    }
+
+    /**
+     * 注入封装RedisTemplate
+     * @Title: redisUtil
+     * @return RedisUtil
+     * @autor lpl
+     * @date 2017年12月21日
+     * @throws
+     */
+    @Bean(name = "redisLock")
+    public RedisLock redisLock(RedisTemplate<String, Object> redisTemplate) {
+        RedisLock redisLock = new RedisLock();
+        redisLock.setRedisTemplate(redisTemplate);
+        return redisLock;
     }
 
 }
